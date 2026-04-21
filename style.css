@@ -216,7 +216,7 @@ button {
   min-height: calc(100vh - var(--header-height));
   display: flex;
   align-items: center;
-  padding-top: 4rem;
+  padding-top: 2rem;
 }
 
 .hero-bg {
@@ -1124,6 +1124,14 @@ p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .hero-visual {
+    order: 1;
+  }
+
+  .hero-copy {
+    order: 2;
+  }
+
   .footer-meta {
     justify-items: start;
   }
@@ -1185,7 +1193,7 @@ p {
   }
 
   .hero {
-    padding-top: 2.6rem;
+    padding-top: 2.6rem!important;
   }
 
   .section {
@@ -1200,6 +1208,22 @@ p {
 @media (max-width: 640px) {
   .container {
     width: min(calc(100% - 1.25rem), var(--container));
+  }
+
+  .hero-visual {
+    margin-inline: -0.35rem;
+  }
+
+  .hero-visual .visual-card {
+    padding: 0.95rem;
+  }
+
+  .hero-visual .visual-card h2 {
+    margin-top: 0.55rem;
+  }
+
+  .hero-visual .visual-card p {
+    margin-top: 0.8rem;
   }
 
   .hero-metrics,
@@ -1222,6 +1246,7 @@ p {
 
   .board-showcase {
     min-height: 290px;
+    margin: 20px 10px;
   }
 
   .board-showcase figcaption,
