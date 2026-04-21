@@ -10,6 +10,7 @@ const lightboxVisual = document.getElementById("lightboxVisual");
 const lightboxTitle = document.getElementById("lightboxTitle");
 const lightboxDescription = document.getElementById("lightboxDescription");
 const lightboxClose = document.querySelector(".lightbox-close");
+const showcaseVideoTrigger = document.querySelector(".video-preview");
 
 if (navToggle && navMenu) {
   navToggle.addEventListener("click", () => {
@@ -93,16 +94,49 @@ faqItems.forEach((item) => {
   });
 });
 
-const openLightbox = (title, description, image) => {
+const clearLightboxVisual = () => {
+  lightboxVisual.innerHTML = "";
+  lightboxVisual.style.backgroundImage = "";
+  lightboxVisual.classList.remove("has-video");
+};
+
+const openLightbox = ({ title, description, image, video, poster, type = "image" }) => {
   lightboxTitle.textContent = title;
   lightboxDescription.textContent = description;
-  lightboxVisual.style.backgroundImage = `url("${image}")`;
+  clearLightboxVisual();
+
+  if (type === "video" && video) {
+    const videoElement = document.createElement("video");
+    videoElement.src = video;
+    videoElement.controls = true;
+    videoElement.autoplay = true;
+    videoElement.playsInline = true;
+    videoElement.preload = "metadata";
+
+    if (poster) {
+      videoElement.poster = poster;
+    }
+
+    lightboxVisual.classList.add("has-video");
+    lightboxVisual.appendChild(videoElement);
+  } else if (image) {
+    lightboxVisual.style.backgroundImage = `url("${image}")`;
+  }
+
   lightbox.classList.add("open");
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("menu-open");
 };
 
 const closeLightbox = () => {
+  const activeVideo = lightboxVisual.querySelector("video");
+
+  if (activeVideo) {
+    activeVideo.pause();
+    activeVideo.currentTime = 0;
+  }
+
+  clearLightboxVisual();
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("menu-open");
@@ -110,9 +144,25 @@ const closeLightbox = () => {
 
 galleryItems.forEach((item) => {
   item.addEventListener("click", () => {
-    openLightbox(item.dataset.title, item.dataset.description, item.dataset.image);
+    openLightbox({
+      title: item.dataset.title,
+      description: item.dataset.description,
+      image: item.dataset.image,
+    });
   });
 });
+
+if (showcaseVideoTrigger) {
+  showcaseVideoTrigger.addEventListener("click", () => {
+    openLightbox({
+      title: showcaseVideoTrigger.dataset.title,
+      description: showcaseVideoTrigger.dataset.description,
+      video: showcaseVideoTrigger.dataset.video,
+      poster: showcaseVideoTrigger.dataset.poster,
+      type: showcaseVideoTrigger.dataset.lightboxType,
+    });
+  });
+}
 
 lightboxClose.addEventListener("click", closeLightbox);
 
